@@ -54,6 +54,9 @@ public class ColourSamplingTests
     [InlineData(0, 0, 0, "Black")]
     [InlineData(255, 255, 255, "White")]
     [InlineData(0, 255, 0, "Lime")]
+    [InlineData(135, 206, 250, "Light Sky Blue")]
+    [InlineData(134, 205, 249, "Light Sky Blue")]
+    [InlineData(47, 79, 79, "Dark Slate Gray")]
     public void FindsNearestCssName(byte r, byte g, byte b, string expected) =>
         Assert.Equal(expected, ColourNames.Nearest(new RgbColour(r, g, b)));
 }

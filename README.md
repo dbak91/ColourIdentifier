@@ -5,16 +5,17 @@ An offline Android app for identifying colours in photos and screenshots.
 ## Features
 
 - Import an image from Android's system file picker (including gallery/cloud providers exposed there).
+- Take a photo with the device's camera and sample it using the same controls.
 - Tap to identify one pixel, or enable **Rectangle mode** and drag to average a region.
-- Preview the colour swatch, closest CSS colour name, `#RRGGBB`, and `rgb(r, g, b)`.
+- Preview the colour swatch and closest colour name in plain English (such as **Red** or **Light Sky Blue**), alongside clearly labelled CSS hex (`#RRGGBB`) and `rgb(r, g, b)` values.
 - Read point coordinates or inclusive rectangle bounds, dimensions and pixel count.
 - Copy either CSS value to the clipboard.
-- Images remain on-device. No network, camera, or broad storage permissions are required.
-- Cancelled or unreadable selections leave the previous image available.
+- Image processing stays on-device. Camera access is requested only when taking a photo; no network or broad storage permissions are required.
+- Cancelled or unreadable selections, camera failures and denied camera permission leave the previous image available. Import still works without a camera.
 
 ## Usage
 
-1. Tap **Import image**, then choose a photo or screenshot in Files. PNG, JPEG and WebP are good starting points.
+1. Tap **Import image**, then choose a photo or screenshot in Files, or tap **Take photo** and accept the camera permission prompt to capture a new image. PNG, JPEG and WebP are good starting points for imports.
 2. With Rectangle mode off, tap the image to sample a point. A crosshair marks the pixel.
 3. With Rectangle mode on, drag from one corner to the opposite corner and release. The outlined rectangle is averaged; dragging in any direction works. Drags ending outside the image clamp to its edge; taps in the surrounding margins are ignored.
 4. Scroll below the preview if necessary to read the result and use **Copy Hex** or **Copy rgb()**.
@@ -85,5 +86,5 @@ As in the template apps, optional signing MSBuild properties can live in `Colour
 - Colour names are best-effort nearest matches by squared distance in 8-bit RGB against 139 distinct CSS named colours (synonyms such as cyan/aqua share one entry). This is not perceptual colour matching or a calibrated measurement tool.
 - Averages are arithmetic means of the displayed 8-bit RGB channels, rounded to the nearest integer, not linear-light averages. Transparent pixels are composited onto **white**, matching the preview.
 - Android controls the supported image codecs. Unsupported/corrupt files produce an error; animated images sample the decoded first frame. HDR/wide-gamut content is converted to the decoder's 8-bit bitmap representation.
-- One image and selection at a time; selections are not saved across app restarts. No camera capture, palette extraction, or batch processing yet.
+- One image and selection at a time; selections are not saved across app restarts. Camera capture uses the system camera app, not a live colour-sampling preview. No palette extraction or batch processing yet.
 - The canvas currently needs touch input; accessible coordinate entry and keyboard selection are future improvements.

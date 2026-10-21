@@ -8,7 +8,8 @@
     <VerticalStackLayout Padding="16" Spacing="12">
         <VerticalStackLayout Spacing="8">
             <Button x:Name="ImportButton" Text="Import image" Clicked="OnImportClicked" />
-            <Label x:Name="ImageInfo" Text="Choose a photo or screenshot from Files." FontSize="13" />
+            <Button x:Name="CameraButton" Text="Take photo" Clicked="OnCameraClicked" />
+            <Label x:Name="ImageInfo" Text="Choose an image from Files or take a photo with the camera." FontSize="13" />
             <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
                 <Label Text="Rectangle mode (off = point)" VerticalOptions="Center" />
                 <Switch x:Name="AreaSwitch" Grid.Column="1" Toggled="OnAreaToggled"
@@ -28,8 +29,8 @@
                 </Border>
                 <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
                     <Label x:Name="ColourName" Text="No colour selected" FontSize="18" FontAttributes="Bold" />
-                    <Label x:Name="HexValue" Text="Hex: —" />
-                    <Label x:Name="RgbValue" Text="rgb(): —" />
+                    <Label x:Name="HexValue" Text="CSS hex: —" />
+                    <Label x:Name="RgbValue" Text="CSS rgb(): —" />
                 </VerticalStackLayout>
             </Grid>
             <Label x:Name="SelectionInfo" Text="Coordinates use the sampled image, starting at (0, 0)."

@@ -14,16 +14,33 @@ public partial class MainPage : ContentPage
         Sampler.SelectionChanged += OnSelectionChanged;
     }
 
-    private async void OnImportClicked(object? sender, EventArgs e)
+    private async void OnImportClicked(object? sender, EventArgs e) =>
+        await ChooseImageAsync(useCamera: false);
+
+    private async void OnCameraClicked(object? sender, EventArgs e) =>
+        await ChooseImageAsync(useCamera: true);
+
+    private async Task ChooseImageAsync(bool useCamera)
     {
-        ImportButton.IsEnabled = false;
+        if (!ImportButton.IsEnabled)
+            return;
+
+        ImportButton.IsEnabled = CameraButton.IsEnabled = false;
         try
         {
-            var file = await FilePicker.Default.PickAsync(new PickOptions
+            if (useCamera && !MediaPicker.Default.IsCaptureSupported)
             {
-                PickerTitle = "Select an image",
-                FileTypes = FilePickerFileType.Images
-            });
+                Status.Text = "No camera is available. You can still import an image.";
+                return;
+            }
+
+            var file = useCamera
+                ? await MediaPicker.Default.CapturePhotoAsync()
+                : await FilePicker.Default.PickAsync(new PickOptions
+                {
+                    PickerTitle = "Select an image",
+                    FileTypes = FilePickerFileType.Images
+                });
             if (file is null)
             {
                 Status.Text = "Selection cancelled. Your previous image is unchanged.";
@@ -40,18 +57,26 @@ public partial class MainPage : ContentPage
                 : "Image loaded. Ready to sample.";
             _selectedColour = null;
             ColourName.Text = "No colour selected";
-            HexValue.Text = "Hex: —";
-            RgbValue.Text = "rgb(): —";
+            HexValue.Text = "CSS hex: —";
+            RgbValue.Text = "CSS rgb(): —";
             Swatch.Color = Colors.Transparent;
             CopyHexButton.IsEnabled = CopyRgbButton.IsEnabled = false;
             SelectionInfo.Text = "Coordinates use the sampled image, starting at (0, 0).";
         }
+        catch (PermissionException)
+        {
+            Status.Text = "Camera permission was denied. Your previous image is unchanged.";
+            await DisplayAlertAsync("Camera permission needed",
+                "Allow camera access in Android settings to take a photo, or use Import image instead.", "OK");
+        }
         catch (Exception ex) when (ex is not OperationCanceledException)
         {
             Status.Text = "Could not load image. Your previous image is unchanged.";
-            await DisplayAlertAsync("Cannot open image",
-                "Choose a readable PNG, JPEG, WebP or another image supported by Android. " +
-                "The file may be unsupported, damaged, unavailable or too large to decode.", "OK");
+            await DisplayAlertAsync(useCamera ? "Cannot take or open photo" : "Cannot open image",
+                useCamera
+                    ? "The camera may be unavailable, or the photo could not be decoded. Try again or import an image."
+                    : "Choose a readable PNG, JPEG, WebP or another image supported by Android. " +
+                      "The file may be unsupported, damaged, unavailable or too large to decode.", "OK");
         }
         catch (OperationCanceledException)
         {
@@ -60,7 +85,7 @@ public partial class MainPage : ContentPage
         finally
         {
             Sampler.IsEnabled = true;
-            ImportButton.IsEnabled = true;
+            ImportButton.IsEnabled = CameraButton.IsEnabled = true;
         }
     }
 
@@ -79,9 +104,9 @@ public partial class MainPage : ContentPage
 
         var colour = image.Average(region);
         _selectedColour = colour;
-        ColourName.Text = $"Closest: {ColourNames.Nearest(colour)}";
-        HexValue.Text = colour.Hex;
-        RgbValue.Text = colour.CssRgb;
+        ColourName.Text = $"Colour: {ColourNames.Nearest(colour)} (closest match)";
+        HexValue.Text = $"CSS hex: {colour.Hex}";
+        RgbValue.Text = $"CSS rgb(): {colour.CssRgb}";
         Swatch.Color = Color.FromRgb(colour.R, colour.G, colour.B);
         SelectionInfo.Text = region.PixelCount == 1
             ? $"Point ({region.Left}, {region.Top}) • 1 pixel"
