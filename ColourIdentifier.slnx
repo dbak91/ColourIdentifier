@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="ColourIdentifier.Tests/ColourIdentifier.Tests.csproj" />
+  <Project Path="ColourIdentifier/ColourIdentifier.csproj" />
+</Solution>
