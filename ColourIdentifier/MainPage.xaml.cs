@@ -65,9 +65,10 @@ public partial class MainPage : ContentPage
         }
         catch (PermissionException)
         {
-            Status.Text = "Camera permission was denied. Your previous image is unchanged.";
-            await DisplayAlertAsync("Camera permission needed",
-                "Allow camera access in Android settings to take a photo, or use Import image instead.", "OK");
+            Status.Text = "Photo access permission was denied. Your previous image is unchanged.";
+            await DisplayAlertAsync("Photo permission needed",
+                "Allow camera access (and storage access on older Android versions, if requested) " +
+                "in Android settings to take a photo, or use Import image instead.", "OK");
         }
         catch (Exception ex) when (ex is not OperationCanceledException)
         {

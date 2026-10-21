@@ -10,7 +10,7 @@ An offline Android app for identifying colours in photos and screenshots.
 - Preview the colour swatch and closest colour name in plain English (such as **Red** or **Light Sky Blue**), alongside clearly labelled CSS hex (`#RRGGBB`) and `rgb(r, g, b)` values.
 - Read point coordinates or inclusive rectangle bounds, dimensions and pixel count.
 - Copy either CSS value to the clipboard.
-- Image processing stays on-device. Camera access is requested only when taking a photo; no network or broad storage permissions are required.
+- Image processing stays on-device. Camera access is requested only when taking a photo. On Android 12L / API 32 and earlier, MAUI also requires legacy storage-write permission for capture; this permission is not declared for newer Android versions. No network permission is required.
 - Cancelled or unreadable selections, camera failures and denied camera permission leave the previous image available. Import still works without a camera.
 
 ## Usage
