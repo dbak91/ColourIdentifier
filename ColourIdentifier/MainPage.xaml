@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:ColourIdentifier.Controls"
+             x:Class="ColourIdentifier.MainPage"
+             Title="ColourIdentifier" BackgroundColor="#121212">
+    <ScrollView>
+    <VerticalStackLayout Padding="16" Spacing="12">
+        <VerticalStackLayout Spacing="8">
+            <Button x:Name="ImportButton" Text="Import image" Clicked="OnImportClicked" />
+            <Label x:Name="ImageInfo" Text="Choose a photo or screenshot from Files." FontSize="13" />
+            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                <Label Text="Rectangle mode (off = point)" VerticalOptions="Center" />
+                <Switch x:Name="AreaSwitch" Grid.Column="1" Toggled="OnAreaToggled"
+                        SemanticProperties.Description="Select a rectangle instead of a single point" />
+            </Grid>
+            <Label x:Name="Instructions" Text="Tap the image to identify one pixel."
+                   TextColor="#CFCFCF" FontSize="13" />
+        </VerticalStackLayout>
+
+        <controls:ImageSampler x:Name="Sampler" HeightRequest="320"
+                               SemanticProperties.Description="Image sampling canvas. Tap for a point or drag in rectangle mode." />
+
+        <VerticalStackLayout Spacing="6">
+            <Grid ColumnDefinitions="64,*" ColumnSpacing="12">
+                <Border Stroke="#CFCFCF" StrokeThickness="1" BackgroundColor="White" HeightRequest="64">
+                    <BoxView x:Name="Swatch" Color="Transparent" />
+                </Border>
+                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                    <Label x:Name="ColourName" Text="No colour selected" FontSize="18" FontAttributes="Bold" />
+                    <Label x:Name="HexValue" Text="Hex: —" />
+                    <Label x:Name="RgbValue" Text="rgb(): —" />
+                </VerticalStackLayout>
+            </Grid>
+            <Label x:Name="SelectionInfo" Text="Coordinates use the sampled image, starting at (0, 0)."
+                   FontSize="12" TextColor="#CFCFCF" />
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                <Button x:Name="CopyHexButton" Text="Copy Hex" IsEnabled="False" Clicked="OnCopyHexClicked" />
+                <Button x:Name="CopyRgbButton" Grid.Column="1" Text="Copy rgb()" IsEnabled="False"
+                        Clicked="OnCopyRgbClicked" />
+            </Grid>
+            <Label x:Name="Status" Text="Images stay on your device." FontSize="12" />
+        </VerticalStackLayout>
+    </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
