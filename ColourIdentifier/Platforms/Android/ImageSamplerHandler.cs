@@ -49,6 +49,7 @@ public sealed class SamplingCanvas : AView
         _highlight.SetStyle(Paint.Style.Stroke);
         _outline.StrokeWidth = 4 * Resources!.DisplayMetrics!.Density;
         _highlight.StrokeWidth = 2 * Resources.DisplayMetrics.Density;
+        SetBackgroundColor(new AColor(30, 30, 30));
         ContentDescription = "Image sampling canvas";
     }
 
@@ -77,7 +78,6 @@ public sealed class SamplingCanvas : AView
     protected override void OnDraw(Canvas canvas)
     {
         base.OnDraw(canvas);
-        canvas.DrawColor(new AColor(30, 30, 30));
         if (_bitmap is null)
             return;
 
